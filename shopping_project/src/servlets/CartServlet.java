@@ -29,6 +29,7 @@ public class CartServlet extends BaseServlet {
 
 	public String addProduct(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("访问购物车服务器成功.....");
 		Integer num = Integer.parseInt(request.getParameter("num"));
 		String pid = request.getParameter("pid");
 		HttpSession session = request.getSession();
