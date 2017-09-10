@@ -16,6 +16,7 @@ public class BaseServlet extends HttpServlet {
 	@SuppressWarnings(value = { "all" })
 	protected void service(HttpServletRequest reg, HttpServletResponse resp) throws ServletException, IOException {
 		// super.service(reg,resp);
+		System.out.println("修改日志!..父类控制器......");
 		reg.setCharacterEncoding("utf-8");
 		resp.setContentType("text/html;charset=utf-8");
 		String methodstr = reg.getParameter("method");
