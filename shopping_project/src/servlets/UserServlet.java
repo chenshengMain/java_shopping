@@ -16,7 +16,6 @@ import org.apache.commons.beanutils.converters.DateConverter;
 
 import cn.dsna.util.images.ValidateCode;
 import domain.User;
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
 import services.CS_service;
 import services.impl.ServiceImpl;
 import toolUtils.UUIDUtils;
