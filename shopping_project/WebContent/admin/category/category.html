@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../../css/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../css/icon.css">
+<script type="text/javascript" src="../../js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+			$(function() {
+
+				var url = "http://localhost:8080/shopping_project/ProductServlet?method=category";
+
+				$('#dg').datagrid({
+					url : url,
+					columns : [ [ {
+						field : 'cid',
+						title : '产品编号',
+						width : '30%'
+					}, {
+						field : 'cname',
+						title : '产品名称',
+						width : '30%'
+					}, {
+						field : 'xx',
+						title : '操作',
+						width : '40%',
+						formatter: function(value,row,index){
+							
+							
+							
+						//	alert(value + "---" + row + "----"+index);
+							return "<a href=javascript:beginEditor('"+row.cid+"')>编辑</a> | <a href=javascript:delCategory('"+row.cid+"')>删除</a>";
+
+						}
+					}
+
+					] ],
+					toolbar : [ {
+						iconCls : 'icon-add',
+						handler : function() {
+							//添加分类
+							
+							$('#win').window('open');
+							$("#addBtn").click(function() {
+							var cname = $("input[name = 'newCname']").val();
+							var url = "http://localhost:8080/shopping_project/categoryServlet";
+							var parame = {"method":"addCategory","newCname":cname};
+							$.post(url,parame,function(data){
+								$.messager.show({
+									title:'我的消息',
+									msg:data.msg+'消息将在3秒后关闭。',
+									timeout:3000,
+									showType:'slide'
+								});
+								$('#win').window('close');	
+								$('#dg').datagrid('reload'); 
+									
+								},"json");
+								
+							});
+
+						}
+					} ]
+				});
+				
+				//修改商品
+				$("#editBtn").click(function () {
+					$('#ff').form('submit', {   
+					    url:"http://localhost:8080/shopping_project/categoryServlet?method=updateCategory",   
+					    success:function(data){  
+					    	var json = eval("("+data+")");
+					    	$.messager.show({
+								title:'我的消息',
+								msg:json.msg+'消息将在3秒后关闭。',
+								timeout:3000,
+								showType:'slide'
+							});
+							$('#winEdit').window('close');	
+							$('#dg').datagrid('reload'); 
+					    }   
+					}); 
+				});
+				
+				
+				
+			});
+			
+			function beginEditor(cid) {
+				$('#winEdit').window('open');
+				$('#ff').form('load','http://localhost:8080/shopping_project/categoryServlet?method=findCategory&&cid='+cid);
+			}
+			function delCategory(cid) {
+				//alert("sss"+cid);
+				if(confirm("确定要删除该分类?")){
+					
+					var url = "http://localhost:8080/shopping_project/categoryServlet";
+					var parame = {"method":"delCategory","cid":cid};
+					$.post(url,parame,function(data){
+						$.messager.show({
+							title:'我的消息',
+							msg:data.msg+'消息将在3秒后关闭。',
+							timeout:3000,
+							showType:'slide'
+						});
+						
+						$('#dg').datagrid('reload'); 
+							
+						},"json");
+					
+				}
+			
+			}
+			
+			
+			
+		</script>
+  <table id="dg"></table>
+  <div id="win" class="easyui-window" title="添加商品分类" style="width: 300px; height: 100px"
+    data-options="iconCls:'icon-save',closable:true,modal:true ,closed:true">
+    添加分类:
+    <input type="text" name="newCname" />
+    <input type="button" id="addBtn" value="添加" />
+  </div>
+  <div id="winEdit" class="easyui-window" title="添加商品分类"
+    style="width: 300px; height: 100px"
+    data-options="iconCls:'icon-save',closable:true,modal:true ,closed:true">
+    <form id="ff" method="post">
+      <input type="hidden" name="cid" />
+      添加分类:
+      <input type="text" name="cname" />
+      <input type="button" id="editBtn" value="修改" />
+    </form>
+  </div>
+</body>
+</html>
